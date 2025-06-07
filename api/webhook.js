@@ -43,9 +43,15 @@ module.exports = async (req, res) => {
     const fx = stockData.fx_rate;
     let msg = [
       `為替レート: ${fx.toFixed(2)}円/USD`,
-      ...stockData.results.map(s =>
-        `${s.symbol} (${s.title})\n$${s.dollar_price} / ¥${Math.round(s.yen_price)}`
-      )
+      ...stockData.results.map(s => {
+        if (s.symbol.endsWith('.T')) {
+          // 日本株は円のみ表示
+          return `${s.symbol} (${s.title})\n¥${Math.round(s.yen_price)}`;
+        } else {
+          // それ以外はドルと円を表示
+          return `${s.symbol} (${s.title})\n$${s.dollar_price} / ¥${Math.round(s.yen_price)}`;
+        }
+      })
     ].join('\n\n');
 
     // .comなどURLになりうる部分の . を半角スペースに置換
