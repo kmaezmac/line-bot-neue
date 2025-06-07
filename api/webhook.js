@@ -1,5 +1,4 @@
 const line = require('@line/bot-sdk');
-const fetch = require('node-fetch');
 
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -14,7 +13,6 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Vercelではbodyがパース済み
   const events = req.body.events || [];
   const results = await Promise.all(events.map(handleEvent));
   res.json(results);
