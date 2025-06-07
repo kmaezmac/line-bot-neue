@@ -41,12 +41,15 @@ module.exports = async (req, res) => {
 
     // 見やすい形でメッセージを作成
     const fx = stockData.fx_rate;
-    const msg = [
+    let msg = [
       `為替レート: ${fx.toFixed(2)}円/USD`,
       ...stockData.results.map(s =>
         `${s.symbol} (${s.title})\n$${s.dollar_price} / ¥${Math.round(s.yen_price)}`
       )
     ].join('\n\n');
+
+    // .comなどURLになりうる部分の . を半角スペースに置換
+    msg = msg.replace(/\.(?=[a-z]{2,6}(\b|\/))/gi, ' ');
 
     return client.replyMessage(event.replyToken, {
       type: 'text',
