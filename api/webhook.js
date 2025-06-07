@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
     let stockData;
     try {
       const symbols = process.env.SYMBOLS.split(',').map(s => s.trim())
-      const apiRes = await fetch('https://stock-getter-orpin.vercel.app/api', {
+      const apiRes = await fetch(process.env.STOCK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ symbols })
