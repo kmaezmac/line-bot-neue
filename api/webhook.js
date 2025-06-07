@@ -48,10 +48,10 @@ module.exports = async (req, res) => {
         const safeTitle = s.title.replace(/\.(?=[a-z]{2,6}(\b|\/))/gi, ' ');
         if (s.symbol.endsWith('.T')) {
           // 日本株は円のみ表示
-          return `${s.symbol} (${safeTitle})\n¥${Math.round(s.yen_price)}`;
+          return `${s.symbol} (${safeTitle})\n¥${s.yen_price.toFixed(2)}`;
         } else {
           // それ以外はドルと円を表示
-          return `${s.symbol} (${safeTitle})\n$${s.dollar_price} / ¥${Math.round(s.yen_price)}`;
+          return `${s.symbol} (${safeTitle})\n$${s.dollar_price} / ¥${s.yen_price.toFixed(2)}`;
         }
       })
     ].join('\n\n');
