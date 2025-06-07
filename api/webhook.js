@@ -44,18 +44,17 @@ module.exports = async (req, res) => {
     let msg = [
       `為替レート: ${fx.toFixed(2)}円/USD`,
       ...stockData.results.map(s => {
+        // titleだけ . を半角スペースに置換
+        const safeTitle = s.title.replace(/\.(?=[a-z]{2,6}(\b|\/))/gi, ' ');
         if (s.symbol.endsWith('.T')) {
           // 日本株は円のみ表示
-          return `${s.symbol} (${s.title})\n¥${Math.round(s.yen_price)}`;
+          return `${s.symbol} (${safeTitle})\n¥${Math.round(s.yen_price)}`;
         } else {
           // それ以外はドルと円を表示
-          return `${s.symbol} (${s.title})\n$${s.dollar_price} / ¥${Math.round(s.yen_price)}`;
+          return `${s.symbol} (${safeTitle})\n$${s.dollar_price} / ¥${Math.round(s.yen_price)}`;
         }
       })
     ].join('\n\n');
-
-    // .comなどURLになりうる部分の . を半角スペースに置換
-    msg = msg.replace(/\.(?=[a-z]{2,6}(\b|\/))/gi, ' ');
 
     return client.replyMessage(event.replyToken, {
       type: 'text',
