@@ -44,14 +44,14 @@ module.exports = async (req, res) => {
     let msg = [
       `為替レート: ${fx.toFixed(2)}円/USD`,
       ...stockData.results.map(s => {
-        // titleだけ . を半角スペースに置換
-        const safeTitle = s.title.replace(/\.(?=[a-z]{2,6}(\b|\/))/gi, ' ');
+        // titleがundefinedの場合は空文字列に
+        const safeTitle = (s.title || '').replace(/\.(?=[a-z]{2,6}(\b|\/))/gi, ' ');
         if (s.symbol.endsWith('.T')) {
           // 日本株は円のみ表示 dollar_priceとあるが、これが実際の円の価格
-          return `${s.symbol} (${safeTitle})\n¥${s.dollar_price.toFixed(2)}`;
+          return `${s.symbol} (${safeTitle})\n¥${s.dollar_price?.toFixed(2) ?? 'N/A'}`;
         } else {
           // それ以外はドルと円を表示
-          return `${s.symbol} (${safeTitle})\n$${s.dollar_price} / ¥${s.yen_price.toFixed(2)}`;
+          return `${s.symbol} (${safeTitle})\n$${s.dollar_price ?? 'N/A'} / ¥${s.yen_price?.toFixed(2) ?? 'N/A'}`;
         }
       })
     ].join('\n\n');
